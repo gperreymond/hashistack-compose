@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  consul-server-1:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-1
+    networks:
+    - 'public-subnet'
+    - 'private-subnet'
+
+  consul-server-2:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-2
+    networks:
+    - 'public-subnet'
+    - 'private-subnet'
+
+  consul-server-3:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-3
+    networks:
+    - 'public-subnet'
+    - 'private-subnet'
+
+networks:
+
+  public-subnet:
+    external: true
+
+  private-subnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 174.0.10.0/24
+          gateway: 174.0.10.1
