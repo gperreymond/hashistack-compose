@@ -1,6 +1,38 @@
 version: '3'
 
+services:
+
+  traefik:
+    image: 'traefik:v2.4.7'
+    container_name: 'traefik'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.traefik=true'
+    - 'traefik.http.routers.traefik.tls=true'
+    - 'traefik.http.services.traefik.loadbalancer.server.port=8080'
+    ports:
+    - '80:80/tcp'
+    - '443:443/tcp'
+    restart: 'unless-stopped'
+    security_opt:
+    - 'no-new-privileges:true'
+    networks:
+    - 'public-subnet'
+    - 'private-subnet'
+    volumes:
+    - './configs/dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro'
+    - './configs/traefik.yaml:/etc/traefik/traefik.yaml:ro'
+    - '../certs:/etc/certs:ro'
+
 networks:
 
   public-subnet:
     external: true
+  
+  private-subnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 174.0.10.0/24
+          gateway: 174.0.10.1

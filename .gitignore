@@ -1,7 +1,2 @@
 bin
 certs
-
-consul-server/.terraform
-consul-server/.terraform.lock.hcl
-consul-server/terraform.tfstate
-consul-server/terraform.tfstate.backup

@@ -8,17 +8,6 @@ ENV CONSUL_VERSION=1.11.1 \
 RUN apt update && \
     apt install -y libcap2-bin iproute2
 
-# SSH
-RUN apt update && \
-    apt install -y openssh-server && \
-    mkdir /var/run/sshd && \
-    echo 'root:root' | chpasswd && \
-    sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
-    mkdir /root/.ssh
-
-EXPOSE 22
-
 # HASHIUP
 RUN apt update && \
     apt install -y curl && \
@@ -34,5 +23,3 @@ EXPOSE 8200
 # CLEN IMAGE
 RUN apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-CMD ["/usr/sbin/sshd", "-D"]
