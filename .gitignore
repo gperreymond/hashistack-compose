@@ -1,4 +1,5 @@
 bin
+certs
 
 consul-server/.terraform
 consul-server/.terraform.lock.hcl
