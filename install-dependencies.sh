@@ -6,9 +6,6 @@ MKCERT_VERSION=1.4.3
 rm -rf ./bin
 mkdir ./bin
 
-rm -rf ./tmp
-mkdir ./tmp
-
 # Download terraform
 echo "[INFO] download terraform"
 curl -sLo ./terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
