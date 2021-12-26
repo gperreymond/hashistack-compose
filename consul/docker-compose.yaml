@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+
+  consul-server-1:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-1
+    restart: 'unless-stopped'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.consul.rule=Host(`consul.docker.localhost`)'
+    - 'traefik.http.services.consul.loadbalancer.server.port=8500'
+    - 'traefik.http.routers.consul.tls=true'
+    volumes:
+    - './configs/server.hcl:/home/root/consul.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node', 'node-consul-server-1']
+
+  consul-server-2:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-2
+    restart: 'unless-stopped'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.consul.rule=Host(`consul.docker.localhost`)'
+    - 'traefik.http.services.consul.loadbalancer.server.port=8500'
+    - 'traefik.http.routers.consul.tls=true'
+    volumes:
+    - './configs/server.hcl:/home/root/consul.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node', 'node-consul-server-2']
+
+  consul-server-3:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-server-3
+    restart: 'unless-stopped'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.consul.rule=Host(`consul.docker.localhost`)'
+    - 'traefik.http.services.consul.loadbalancer.server.port=8500'
+    - 'traefik.http.routers.consul.tls=true'
+    volumes:
+    - './configs/server.hcl:/home/root/consul.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node', 'node-consul-server-3']
+
+networks:
+
+  public-subnet:
+    external: true
+
+  # private-subnet:
+  #   driver: bridge
+  #   ipam:
+  #     driver: default
+  #     config:
+  #       - subnet: 174.0.20.0/24
+  #         gateway: 174.0.20.1

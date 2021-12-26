@@ -17,6 +17,5 @@ autopilot {
   max_trailing_logs = 250
   server_stabilization_time = "10s"
 }
-advertise_addr = "{{ GetInterfaceIP \"eth1\" }}"
-bind_addr = "0.0.0.0"
-client_addr = "0.0.0.0"
+bind_addr = "{{ GetInterfaceIP \"eth0\" }}"
+client_addr = "{{ GetInterfaceIP \"eth0\" }}"

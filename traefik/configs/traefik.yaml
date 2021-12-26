@@ -6,10 +6,15 @@ api:
   insecure: true
 
 providers:
-  # consulCatalog:
-  #   endpoint:
-  #     address: consul-server-1:8500
-  #     datacenter: global
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    watch: true
+    exposedbydefault: false
+  consulCatalog:
+    endpoint:
+      address: consul-client-traefik:8500
+      datacenter: global
+    exposedbydefault: false
   file:
     filename: /etc/traefik/dynamic_conf.yaml
     watch: true

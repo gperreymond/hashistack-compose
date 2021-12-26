@@ -18,21 +18,31 @@ services:
     - 'no-new-privileges:true'
     networks:
     - 'public-subnet'
-    - 'private-subnet'
     volumes:
+    - '/var/run/docker.sock:/var/run/docker.sock:ro'
     - './configs/dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro'
     - './configs/traefik.yaml:/etc/traefik/traefik.yaml:ro'
     - '../certs:/etc/certs:ro'
+
+  consul-client:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-client-traefik
+    restart: 'unless-stopped'
+    volumes:
+    - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node', 'node-traefik']
 
 networks:
 
   public-subnet:
     external: true
   
-  private-subnet:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 174.0.10.0/24
-          gateway: 174.0.10.1
+  # private-subnet:
+  #   driver: bridge
+  #   ipam:
+  #     driver: default
+  #     config:
+  #       - subnet: 174.0.10.0/24
+  #         gateway: 174.0.10.1

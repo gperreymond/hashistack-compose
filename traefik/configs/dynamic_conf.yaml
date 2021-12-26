@@ -5,14 +5,14 @@ http:
       service: "api@internal"
       tls:
         domains:
-          - main: "docker.localhost"
-            sans:
-              - "*.docker.localhost"
-          - main: "domain.local"
-            sans:
-              - "*.domain.local"
+        - main: "docker.localhost"
+          sans:
+            - "*.docker.localhost"
+        - main: "domain.local"
+          sans:
+            - "*.domain.local"
 
 tls:
   certificates:
-    - certFile: "/etc/certs/local-cert.pem"
-      keyFile: "/etc/certs/local-key.pem"
+  - certFile: "/etc/certs/local-cert.pem"
+    keyFile: "/etc/certs/local-key.pem"
