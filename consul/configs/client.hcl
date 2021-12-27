@@ -7,5 +7,7 @@ log_level  = "INFO"
 log_json  = true
 server    = false
 retry_join = ["consul-server-1", "consul-server-2", "consul-server-3"]
-bind_addr = "{{ GetInterfaceIP \"eth0\" }}"
-client_addr = "{{ GetInterfaceIP \"eth0\" }}" # Because not on the same physical machine "127.0.0.1"
+
+advertise_addr = "{{ GetInterfaceIP \"eth0\" }}"
+bind_addr = "0.0.0.0"
+client_addr = "0.0.0.0"

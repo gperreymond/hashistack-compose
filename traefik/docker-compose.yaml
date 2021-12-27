@@ -24,15 +24,15 @@ services:
     - './configs/traefik.yaml:/etc/traefik/traefik.yaml:ro'
     - '../certs:/etc/certs:ro'
 
-  consul-client:
+  consul-client-traefik:
     image: 'hashistack-alpine:1.0.0'
-    container_name: consul-client-traefik
+    container_name: 'consul-client-traefik'
     restart: 'unless-stopped'
     volumes:
     - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
     networks:
     - 'public-subnet'
-    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node', 'node-traefik']
+    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-traefik']
 
 networks:
 

@@ -20,8 +20,8 @@ providers:
     watch: true
 
 log:
-  level: DEBUG
-  format: common
+  level: INFO
+  format: json
 
 entryPoints:
   web:
