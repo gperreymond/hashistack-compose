@@ -12,9 +12,9 @@ RUN apt update && \
 RUN apt update && \
     apt install -y curl && \
     curl -sLS https://get.hashi-up.dev | sh && \
-    hashi-up consul install --local --version ${CONSUL_VERSION} --skip-enable && \
-    hashi-up nomad install --local --version ${NOMAD_VERSION} --skip-enable && \
-    hashi-up vault install --local --version ${VAULT_VERSION} --skip-enable
+    hashi-up consul get --version ${CONSUL_VERSION} && \
+    hashi-up nomad get --version ${NOMAD_VERSION} && \
+    hashi-up vault get --version ${VAULT_VERSION}
 
 EXPOSE 8500 8600 8600/udp 8300 8301 8301/udp 8302 8302/udp
 EXPOSE 4646 4647 4648 4648/udp

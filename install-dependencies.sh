@@ -3,6 +3,7 @@
 MKCERT_VERSION=1.4.3
 CONSUL_VERSION=1.10.4
 NOMAD_VERSION=1.2.2
+VAULT_VERSION=1.9.2
 
 rm -rf ./bin
 mkdir ./bin
@@ -29,3 +30,11 @@ unzip ./nomad.zip -d ./bin
 rm ./nomad.zip
 chmod +x ./bin/nomad
 echo "[INFO] nomad v${NOMAD_VERSION} installed"
+
+# Download vault
+echo "[INFO] download vault"
+curl -sLo ./vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
+unzip ./vault.zip -d ./bin
+rm ./vault.zip
+chmod +x ./bin/vault
+echo "[INFO] vault v${VAULT_VERSION} installed"

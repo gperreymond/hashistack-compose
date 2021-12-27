@@ -11,7 +11,10 @@ $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh
 $ docker build -t hashistack-alpine:1.0.0 .
 $ ./bootstrap.sh --generate-certificats
-# Start and Stop the hashistack
+# Start
 $ ./bootstrap.sh --start
+# Inits
+$ ./bootstrap.sh --init-vault
+# Stop
 $ ./bootstrap.sh --stop
 ```

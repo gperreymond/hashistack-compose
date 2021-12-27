@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  vault-server:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: 'vault-server'
+    restart: 'unless-stopped'
+    privileged: 'true'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.vault.rule=Host(`vault.docker.localhost`)'
+    - 'traefik.http.services.vault.loadbalancer.server.port=8200'
+    - 'traefik.http.routers.vault.tls=true'
+    depends_on:
+      - 'consul-client-vault-server'
+    volumes:
+    - './configs/server.hcl:/home/root/vault.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['/root/bin/vault', 'server', '-config=/home/root/vault.hcl']
+
+  consul-client-vault-server:
+    image: 'hashistack-alpine:1.0.0'
+    container_name: consul-client-vault-server
+    restart: 'unless-stopped'
+    volumes:
+    - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
+    networks:
+    - 'public-subnet'
+    command: ['/root/bin/consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-vault-server']
+
+networks:
+
+  public-subnet:
+    external: true

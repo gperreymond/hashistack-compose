@@ -21,6 +21,9 @@ if [ "$1" = '--start' ]; then
     docker-compose -f consul/docker-compose-server-1.yaml up -d
     docker-compose -f consul/docker-compose-server-2.yaml up -d
     docker-compose -f consul/docker-compose-server-3.yaml up -d
+    sleep 20
+    # vault
+    docker-compose -f vault/docker-compose-server.yaml up -d
     # nomad server
     docker-compose -f nomad/docker-compose-server-1.yaml up -d
     docker-compose -f nomad/docker-compose-server-2.yaml up -d
@@ -36,6 +39,8 @@ if [ "$1" = '--stop' ]; then
     docker-compose -f nomad/docker-compose-server-1.yaml down
     docker-compose -f nomad/docker-compose-server-2.yaml down
     docker-compose -f nomad/docker-compose-server-3.yaml down
+    # vault
+    docker-compose -f vault/docker-compose-server.yaml down
     # consul server
     docker-compose -f consul/docker-compose-server-1.yaml down
     docker-compose -f consul/docker-compose-server-2.yaml down
@@ -44,4 +49,15 @@ if [ "$1" = '--stop' ]; then
     docker-compose -f traefik/docker-compose.yaml down
     # network
     docker network rm public-subnet
+fi
+
+if [ "$1" = '--init-vault' ]; then
+    initialized=$(curl -s https://vault.docker.localhost/v1/sys/init | jq -r .initialized)
+    echo "[INFO] initialized=${initialized}"
+    if [ $initialized = "true" ]; then
+        exit 0
+    fi
+    echo "[INFO] unseal"
+    curl -sX PUT --data '{"recovery_shares": 5, "recovery_threshold": 3}' https://vault.docker.localhost/v1/sys/init > vault.json
+    cat vault.json
 fi

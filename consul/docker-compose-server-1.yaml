@@ -15,7 +15,7 @@ services:
     - './configs/server.hcl:/home/root/consul.hcl:ro'
     networks:
     - 'public-subnet'
-    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-consul-server-1']
+    command: ['/root/bin/consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-consul-server-1']
 
 networks:
 

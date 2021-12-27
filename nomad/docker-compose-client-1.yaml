@@ -6,11 +6,13 @@ services:
     image: 'hashistack-alpine:1.0.0'
     container_name: 'nomad-client-1'
     restart: 'unless-stopped'
+    depends_on:
+      - 'consul-client-nomad-client-1'
     volumes:
     - './configs/client.hcl:/home/root/nomad.hcl:ro'
     networks:
     - 'public-subnet'
-    command: ['nomad', 'agent', '-config=/home/root/nomad.hcl', '-consul-address=consul-client-nomad-client-1:8500', '-node=node-nomad-client-1']
+    command: ['/root/bin/nomad', 'agent', '-config=/home/root/nomad.hcl', '-consul-address=consul-client-nomad-client-1:8500', '-node=node-nomad-client-1']
 
   consul-client-nomad-client-1:
     image: 'hashistack-alpine:1.0.0'
@@ -20,7 +22,7 @@ services:
     - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
     networks:
     - 'public-subnet'
-    command: ['consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-nomad-client-1']
+    command: ['/root/bin/consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-nomad-client-1']
 
 networks:
 
