@@ -25,9 +25,13 @@ if [ "$1" = '--start' ]; then
     docker-compose -f nomad/docker-compose-server-1.yaml up -d
     docker-compose -f nomad/docker-compose-server-2.yaml up -d
     docker-compose -f nomad/docker-compose-server-3.yaml up -d
+    # nomad client
+    docker-compose -f nomad/docker-compose-client-1.yaml up -d
 fi
 
 if [ "$1" = '--stop' ]; then
+    # nomad client
+    docker-compose -f nomad/docker-compose-client-1.yaml down
     # nomad server
     docker-compose -f nomad/docker-compose-server-1.yaml down
     docker-compose -f nomad/docker-compose-server-2.yaml down

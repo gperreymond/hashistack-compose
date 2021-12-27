@@ -7,9 +7,6 @@ log_level  = "INFO"
 log_json  = true
 leave_on_interrupt = false
 leave_on_terminate = true
-autopilot {
-  cleanup_dead_servers = true
-}
 consul {
   server_service_name = "nomad"
   client_service_name = "nomad-client"
@@ -18,11 +15,10 @@ consul {
   client_auto_join = true
 }
 server {
-  enabled = true
-  bootstrap_expect = 3
+  enabled = false
 }
 client {
-  enabled = false
+  enabled = true
 }
 advertise {
   http = "{{ GetInterfaceIP \"eth0\" }}"

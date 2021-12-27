@@ -1,7 +1,7 @@
 # ------------------
 # DEFAULT
 # ------------------
-datacenter = "global"
+datacenter = "europe-paris"
 data_dir = "/opt/consul"
 log_level  = "INFO"
 log_json  = true
