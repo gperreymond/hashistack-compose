@@ -1,6 +1,3 @@
-# ------------------
-# DEFAULT
-# ------------------
 datacenter = "europe-paris"
 data_dir = "/opt/consul"
 log_level  = "INFO"
@@ -11,6 +8,8 @@ retry_join = ["consul-server-1", "consul-server-2", "consul-server-3"]
 ui_config {
   enabled = true
 }
+encrypt_verify_incoming = true
+encrypt_verify_outgoing = true
 autopilot {
   cleanup_dead_servers = true
   last_contact_threshold = "1s"

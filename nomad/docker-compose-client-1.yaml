@@ -22,7 +22,7 @@ services:
     - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
     networks:
     - 'public-subnet'
-    command: ['/root/bin/consul', 'agent', '-config-file=/home/root/consul.hcl', '-node=node-nomad-client-1']
+    command: ['/root/bin/consul', 'agent', '-encrypt=${CONSUL_ENCRYPT}', '-config-file=/home/root/consul.hcl', '-node=node-nomad-client-1']
 
 networks:
 

@@ -2,10 +2,18 @@
 
 CONSUL_VERSION=1.11.1
 
-if [ "$1" = '--generate-certificats' ]; then
+if [ "$1" = '--generate-security' ]; then
     mkdir -p certs
+    # ssl certificats for traefik
     ./bin/mkcert -install
     ./bin/mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost"
+    # consul: initialize the built-in CA
+    ./bin/consul tls ca create
+    mv consul-agent-ca.pem certs/
+    mv consul-agent-ca-key.pem certs/
+    # docker compose env vars
+    echo "CONSUL_ENCRYPT=\"$(./bin/consul keygen)\"
+" > localhost.env
 fi
 
 if [ "$1" = '--start' ]; then
@@ -17,20 +25,20 @@ if [ "$1" = '--start' ]; then
         --subnet "172.0.10.0/24" \
         public-subnet
     # traefik
-    docker-compose -f traefik/docker-compose.yaml up -d
+    docker-compose --env-file localhost.env -f traefik/docker-compose.yaml up -d
     # consul server
-    docker-compose -f consul/docker-compose-server-1.yaml up -d
-    docker-compose -f consul/docker-compose-server-2.yaml up -d
-    docker-compose -f consul/docker-compose-server-3.yaml up -d
+    docker-compose --env-file localhost.env -f consul/docker-compose-server-1.yaml up -d
+    docker-compose --env-file localhost.env -f consul/docker-compose-server-2.yaml up -d
+    docker-compose --env-file localhost.env -f consul/docker-compose-server-3.yaml up -d
     sleep 20
     # vault
-    docker-compose -f vault/docker-compose-server.yaml up -d
+    docker-compose --env-file localhost.env -f vault/docker-compose-server.yaml up -d
     # nomad server
-    docker-compose -f nomad/docker-compose-server-1.yaml up -d
-    docker-compose -f nomad/docker-compose-server-2.yaml up -d
-    docker-compose -f nomad/docker-compose-server-3.yaml up -d
+    docker-compose --env-file localhost.env -f nomad/docker-compose-server-1.yaml up -d
+    docker-compose --env-file localhost.env -f nomad/docker-compose-server-2.yaml up -d
+    docker-compose --env-file localhost.env -f nomad/docker-compose-server-3.yaml up -d
     # nomad client
-    docker-compose -f nomad/docker-compose-client-1.yaml up -d
+    docker-compose --env-file localhost.env -f nomad/docker-compose-client-1.yaml up -d
 fi
 
 if [ "$1" = '--stop' ]; then

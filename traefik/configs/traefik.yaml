@@ -13,7 +13,7 @@ providers:
   consulCatalog:
     endpoint:
       address: consul-client-traefik:8500
-      datacenter: global
+      datacenter: europe-paris
     exposedbydefault: false
   file:
     filename: /etc/traefik/dynamic_conf.yaml

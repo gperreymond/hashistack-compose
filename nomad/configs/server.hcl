@@ -1,6 +1,3 @@
-# ------------------
-# DEFAULT
-# ------------------
 datacenter = "europe-paris"
 data_dir = "/opt/nomad"
 log_level  = "INFO"

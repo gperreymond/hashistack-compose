@@ -2,4 +2,4 @@ bin
 certs
 data
 
-vault.json
+localhost.env
