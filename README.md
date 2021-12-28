@@ -8,7 +8,9 @@
 * [x] Nomad servers x3 with consul client
 * [x] Nomad client with consul client
 * [x] Vault server x1
-* [ ] Consul token enabled
+* [x] Vault init and unseal
+* [x] Consul gossip encryption enabled
+* [x] Consul tls enabled
 
 ### Scripts
 
