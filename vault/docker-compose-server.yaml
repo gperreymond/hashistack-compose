@@ -7,13 +7,15 @@ services:
     container_name: 'vault-server'
     restart: 'unless-stopped'
     privileged: 'true'
+    environment:
+      - 'VAULT_ADDR=http://127.0.0.1:8200'
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.vault.rule=Host(`vault.docker.localhost`)'
     - 'traefik.http.services.vault.loadbalancer.server.port=8200'
     - 'traefik.http.routers.vault.tls=true'
     depends_on:
-      - 'consul-client-vault-server'
+    - 'consul-client-vault-server'
     volumes:
     - './configs/server.hcl:/home/root/vault.hcl:ro'
     networks:

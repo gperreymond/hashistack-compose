@@ -1,8 +1,9 @@
 * [x] Docker base image with consul, nomad and vault
 * [x] Certificats with mkcert
-* [x] Consul server
-* [x] Nomad server with consul client
+* [x] Consul servers x3
+* [x] Nomad servers x3 with consul client
 * [x] Nomad client with consul client
+* [x] Vault server x1
 
 
 ```sh
@@ -13,8 +14,9 @@ $ docker build -t hashistack-alpine:1.0.0 .
 $ ./bootstrap.sh --generate-certificats
 # Start
 $ ./bootstrap.sh --start
-# Inits
-$ ./bootstrap.sh --init-vault
+# Vault, do it once only each time the stack was down to up
+$ ./bootstrap.sh --vault-init
+$ ./bootstrap.sh --vault-unseal
 # Stop
 $ ./bootstrap.sh --stop
 ```

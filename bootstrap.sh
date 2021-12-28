@@ -9,6 +9,7 @@ if [ "$1" = '--generate-certificats' ]; then
 fi
 
 if [ "$1" = '--start' ]; then
+    mkdir -p data
     # network
     docker network create \
         --driver=bridge \
@@ -49,15 +50,32 @@ if [ "$1" = '--stop' ]; then
     docker-compose -f traefik/docker-compose.yaml down
     # network
     docker network rm public-subnet
+    rm -rf data
 fi
 
-if [ "$1" = '--init-vault' ]; then
+if [ "$1" = '--vault-init' ]; then
     initialized=$(curl -s https://vault.docker.localhost/v1/sys/init | jq -r .initialized)
     echo "[INFO] initialized=${initialized}"
     if [ $initialized = "true" ]; then
         exit 0
     fi
-    echo "[INFO] unseal"
-    curl -sX PUT --data '{"recovery_shares": 5, "recovery_threshold": 3}' https://vault.docker.localhost/v1/sys/init > vault.json
-    cat vault.json
+    docker exec -it vault-server /root/bin/vault operator init -format=json > data/vault.json
+fi
+
+if [ "$1" = '--vault-unseal' ]; then
+    sealed=$(curl -s https://vault.docker.localhost/v1/sys/seal-status | jq -r .sealed)
+    echo "[INFO] sealed=${sealed}"
+    if [ $sealed = "true" ]; then
+        root_token=$(cat ./data/vault.json | jq -r .root_token)
+        echo "[INFO] root_token=${root_token}"
+        unseal_key_1=$(cat ./data/vault.json | jq -r .unseal_keys_b64[0])
+        echo "[INFO] unseal_key_1=${unseal_key_1}"
+        unseal_key_2=$(cat ./data/vault.json | jq -r .unseal_keys_b64[1])
+        echo "[INFO] unseal_key_2=${unseal_key_2}"
+        unseal_key_3=$(cat ./data/vault.json | jq -r .unseal_keys_b64[2])
+        echo "[INFO] unseal_key_3=${unseal_key_3}"
+        curl -s -X PUT -d "{\"key\":\"${unseal_key_1}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
+        curl -s -X PUT -d "{\"key\":\"${unseal_key_2}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
+        curl -s -X PUT -d "{\"key\":\"${unseal_key_3}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
+    fi
 fi
