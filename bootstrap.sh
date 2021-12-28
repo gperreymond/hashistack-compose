@@ -1,7 +1,5 @@
 #!/bin/bash
 
-CONSUL_VERSION=1.11.1
-
 if [ "$1" = '--generate-security' ]; then
     mkdir -p certs
     # ssl certificats for traefik
@@ -9,8 +7,13 @@ if [ "$1" = '--generate-security' ]; then
     ./bin/mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost"
     # consul: initialize the built-in CA
     ./bin/consul tls ca create
+    # consul: create the server certificates
+    ./bin/consul tls cert create -server -dc "europe-paris"
+    # consul: move certificats
     mv consul-agent-ca.pem certs/
     mv consul-agent-ca-key.pem certs/
+    mv europe-paris-server-consul-0-key.pem certs/
+    mv europe-paris-server-consul-0.pem certs/
     # docker compose env vars
     echo "CONSUL_ENCRYPT=\"$(./bin/consul keygen)\"
 " > localhost.env
@@ -24,13 +27,13 @@ if [ "$1" = '--start' ]; then
         --gateway "172.0.10.1" \
         --subnet "172.0.10.0/24" \
         public-subnet
-    # traefik
-    docker-compose --env-file localhost.env -f traefik/docker-compose.yaml up -d
     # consul server
     docker-compose --env-file localhost.env -f consul/docker-compose-server-1.yaml up -d
     docker-compose --env-file localhost.env -f consul/docker-compose-server-2.yaml up -d
     docker-compose --env-file localhost.env -f consul/docker-compose-server-3.yaml up -d
     sleep 20
+    # traefik
+    docker-compose --env-file localhost.env -f traefik/docker-compose.yaml up -d
     # vault
     docker-compose --env-file localhost.env -f vault/docker-compose-server.yaml up -d
     # nomad server
@@ -50,12 +53,12 @@ if [ "$1" = '--stop' ]; then
     docker-compose -f nomad/docker-compose-server-3.yaml down
     # vault
     docker-compose -f vault/docker-compose-server.yaml down
+    # traefik
+    docker-compose -f traefik/docker-compose.yaml down
     # consul server
     docker-compose -f consul/docker-compose-server-1.yaml down
     docker-compose -f consul/docker-compose-server-2.yaml down
     docker-compose -f consul/docker-compose-server-3.yaml down
-    # traefik
-    docker-compose -f traefik/docker-compose.yaml down
     # network
     docker network rm public-subnet
     rm -rf data

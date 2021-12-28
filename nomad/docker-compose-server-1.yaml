@@ -25,6 +25,7 @@ services:
     restart: 'unless-stopped'
     volumes:
     - '../consul/configs/client.hcl:/home/root/consul.hcl:ro'
+    - '../certs/consul-agent-ca.pem:/home/root/certs/consul-agent-ca.pem:ro'
     networks:
     - 'public-subnet'
     command: ['/root/bin/consul', 'agent', '-encrypt=${CONSUL_ENCRYPT}', '-config-file=/home/root/consul.hcl', '-node=node-nomad-server-1']

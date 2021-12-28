@@ -16,6 +16,15 @@ autopilot {
   max_trailing_logs = 250
   server_stabilization_time = "10s"
 }
+verify_incoming = true
+verify_outgoing = true
+verify_server_hostname = true
+ca_file = "/home/root/certs/consul-agent-ca.pem"
+cert_file = "/home/root/certs/europe-paris-server-consul-0.pem"
+key_file = "/home/root/certs/europe-paris-server-consul-0-key.pem"
+auto_encrypt {
+  allow_tls = true
+}
 advertise_addr = "{{ GetInterfaceIP \"eth0\" }}"
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"

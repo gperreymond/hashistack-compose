@@ -13,6 +13,7 @@ services:
     - 'traefik.http.routers.consul.tls=true'
     volumes:
     - './configs/server.hcl:/home/root/consul.hcl:ro'
+    - '../certs:/home/root/certs:ro'
     networks:
     - 'public-subnet'
     command: ['/root/bin/consul', 'agent', '-encrypt=${CONSUL_ENCRYPT}', '-config-file=/home/root/consul.hcl', '-node=node-consul-server-2']
