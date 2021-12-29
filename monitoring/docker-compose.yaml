@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  prometheus:
+    image: 'prom/prometheus:v2.32.1'
+    container_name: 'prometheus'
+    restart: 'unless-stopped'
+    user: root
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.prometheus.rule=Host(`prometheus.docker.localhost`)'
+    - 'traefik.http.routers.prometheus.tls=true'
+    - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
+    command:
+    - '--storage.tsdb.retention.time=2h'
+    - '--config.file=/etc/prometheus/prometheus.yaml'
+    - '--storage.tsdb.path=/prometheus'
+    - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+    - '--web.console.templates=/usr/share/prometheus/consoles'
+    volumes:
+    - './prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro'
+    - './prometheus/rules:/etc/prometheus/rules:ro'
+    - 'prometheus-data:/prometheus'
+    networks:
+    - 'public-subnet'
+
+volumes:
+
+  prometheus-data: {}
+
+networks:
+
+  public-subnet:
+    external: true

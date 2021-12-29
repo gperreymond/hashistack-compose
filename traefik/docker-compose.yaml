@@ -6,7 +6,7 @@ services:
     image: 'traefik:v2.4.7'
     container_name: 'traefik'
     depends_on:
-      - 'consul-client-traefik'
+    - 'consul-client-traefik'
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.traefik=true'
@@ -41,11 +41,3 @@ networks:
 
   public-subnet:
     external: true
-  
-  # private-subnet:
-  #   driver: bridge
-  #   ipam:
-  #     driver: default
-  #     config:
-  #       - subnet: 174.0.10.0/24
-  #         gateway: 174.0.10.1

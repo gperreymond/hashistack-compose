@@ -1,0 +1,22 @@
+global:
+  scrape_interval: '1m'
+  scrape_timeout: '30s'
+  evaluation_interval: '1m'
+
+rule_files:
+- '/etc/prometheus/rules/*.yaml'
+
+scrape_configs:
+- job_name: consul
+  honor_timestamps: true
+  metrics_path: '/metrics'
+  scheme: http
+  static_configs:
+  - targets:
+    - consul-exporter-consul-server-1:9107
+    - consul-exporter-consul-server-2:9107
+    - consul-exporter-consul-server-3:9107
+  metric_relabel_configs:
+  - regex: (instance)
+    replacement: $1
+    action: labeldrop

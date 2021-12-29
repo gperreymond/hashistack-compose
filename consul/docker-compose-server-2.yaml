@@ -9,14 +9,22 @@ services:
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.consul.rule=Host(`consul.docker.localhost`)'
-    - 'traefik.http.services.consul.loadbalancer.server.port=8500'
     - 'traefik.http.routers.consul.tls=true'
+    - 'traefik.http.services.consul.loadbalancer.server.port=8500'
     volumes:
     - './configs/server.hcl:/home/root/consul.hcl:ro'
     - '../certs:/home/root/certs:ro'
     networks:
     - 'public-subnet'
     command: ['/root/bin/consul', 'agent', '-encrypt=${CONSUL_ENCRYPT}', '-config-file=/home/root/consul.hcl', '-node=node-consul-server-2']
+
+  consul-exporter-consul-server-2:
+    image: 'prom/consul-exporter'
+    container_name: consul-exporter-consul-server-2
+    restart: 'unless-stopped'
+    networks:
+    - 'public-subnet'
+    command: ['--consul.server=consul-server-2:8500']
 
 networks:
 

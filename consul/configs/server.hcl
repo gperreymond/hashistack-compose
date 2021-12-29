@@ -5,6 +5,10 @@ log_json  = true
 server    = true
 bootstrap_expect = 3
 retry_join = ["consul-server-1", "consul-server-2", "consul-server-3"]
+telemetry = {
+  prometheus_retention_time = "8h"
+  disable_hostname = true
+}
 ui_config {
   enabled = true
 }

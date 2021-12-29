@@ -11,8 +11,8 @@ services:
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.nomad.rule=Host(`nomad.docker.localhost`)'
-    - 'traefik.http.services.nomad.loadbalancer.server.port=4646'
     - 'traefik.http.routers.nomad.tls=true'
+    - 'traefik.http.services.nomad.loadbalancer.server.port=4646'
     volumes:
     - './configs/server.hcl:/home/root/nomad.hcl:ro'
     networks:

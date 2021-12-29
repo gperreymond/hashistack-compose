@@ -12,8 +12,8 @@ services:
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.vault.rule=Host(`vault.docker.localhost`)'
-    - 'traefik.http.services.vault.loadbalancer.server.port=8200'
     - 'traefik.http.routers.vault.tls=true'
+    - 'traefik.http.services.vault.loadbalancer.server.port=8200'
     depends_on:
     - 'consul-client-vault-server'
     volumes:
