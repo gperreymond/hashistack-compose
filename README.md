@@ -1,5 +1,10 @@
 # HASHISTACK COMPOSE
 
+### Pricipals
+
+* Each docker compose files represents an instance
+* An example of nomad client is provided with a vagrant procedure
+
 ### Work in progress
 
 * [x] Docker base image with consul, nomad and vault
@@ -17,10 +22,13 @@
 * [x] Monitoring Grafana: Consul dashboard
 * [x] Monitoring Prometheus: Consul alerts
 
-### Scripts
+### How to bootstrap the hashistack ?
+
+You need VirtualBox installed for Vagrant.
 
 ```sh
 # Only one time
+$ sudo apt install -y libarchive-dev libarchive-tools # for vagrant
 $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh
 $ docker build -t hashistack-alpine:1.0.0 .
@@ -32,6 +40,13 @@ $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
 # Stop
 $ ./bootstrap.sh --stop
+```
+
+### How to run the nomad client ?
+
+```sh
+$ cd nomad-client
+$ ../bin/vagrant up
 ```
 
 ### External urls

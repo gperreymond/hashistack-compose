@@ -40,8 +40,6 @@ if [ "$1" = '--start' ]; then
     docker-compose --env-file localhost.env -f nomad/docker-compose-server-1.yaml up -d
     docker-compose --env-file localhost.env -f nomad/docker-compose-server-2.yaml up -d
     docker-compose --env-file localhost.env -f nomad/docker-compose-server-3.yaml up -d
-    # nomad client
-    docker-compose --env-file localhost.env -f nomad/docker-compose-client-1.yaml up -d
     # monitoring
     docker-compose --env-file localhost.env -f monitoring/docker-compose.yaml up -d
 fi
@@ -49,8 +47,6 @@ fi
 if [ "$1" = '--stop' ]; then
     # monitoring
     docker-compose --env-file localhost.env -f monitoring/docker-compose.yaml down
-    # nomad client
-    docker-compose --env-file localhost.env -f nomad/docker-compose-client-1.yaml down
     # nomad server
     docker-compose --env-file localhost.env -f nomad/docker-compose-server-1.yaml down
     docker-compose --env-file localhost.env -f nomad/docker-compose-server-2.yaml down

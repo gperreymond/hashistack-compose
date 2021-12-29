@@ -15,6 +15,7 @@ services:
     ports:
     - '80:80/tcp'
     - '443:443/tcp'
+    - '8500:8500/tcp'
     restart: 'unless-stopped'
     security_opt:
     - 'no-new-privileges:true'

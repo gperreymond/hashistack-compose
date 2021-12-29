@@ -4,6 +4,7 @@ MKCERT_VERSION=1.4.3
 CONSUL_VERSION=1.10.4
 NOMAD_VERSION=1.2.2
 VAULT_VERSION=1.9.2
+VAGRANT_VERSION=2.2.19
 
 rm -rf ./bin
 mkdir ./bin
@@ -38,3 +39,11 @@ unzip ./vault.zip -d ./bin
 rm ./vault.zip
 chmod +x ./bin/vault
 echo "[INFO] vault v${VAULT_VERSION} installed"
+
+# Download vagrant
+echo "[INFO] download vagrant"
+curl -sLo ./vagrant.zip https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_linux_amd64.zip
+unzip ./vagrant.zip -d ./bin
+rm ./vagrant.zip
+chmod +x ./bin/vagrant
+echo "[INFO] vagrant v${VAGRANT_VERSION} installed"
