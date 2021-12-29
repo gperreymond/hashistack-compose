@@ -25,9 +25,32 @@ services:
     networks:
     - 'public-subnet'
 
+  grafana:
+    image: 'grafana/grafana:8.3.3'
+    container_name: grafana
+    restart: 'unless-stopped'
+    user: "472"
+    environment:
+    - 'GF_SERVER_ROOT_URL=https://grafana.docker.localhost'
+    - 'GF_SECURITY_ADMIN_USER=admin'
+    - 'GF_SECURITY_ADMIN_PASSWORD=changeme'
+    - 'GF_USERS_ALLOW_SIGN_UP=false'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.grafana.rule=Host(`grafana.docker.localhost`)'
+    - 'traefik.http.routers.grafana.tls=true'
+    - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+    volumes:
+    - 'grafana-data:/var/lib/grafana'
+    - './grafana/provisioning:/etc/grafana/provisioning:ro'
+    networks:
+    - 'public-subnet'
+
+
 volumes:
 
   prometheus-data: {}
+  grafana-data: {}
 
 networks:
 

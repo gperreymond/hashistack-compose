@@ -13,7 +13,9 @@
 * [x] Consul tls enabled
 * [x] Monitoring Prometheus enabled
 * [x] Consul servers prometheus exporters
-* [ ] Monitoring Grafana enabled
+* [x] Monitoring Grafana enabled
+* [x] Monitoring Grafana: Consul dashboard
+* [x] Monitoring Prometheus: Consul alerts
 
 ### Scripts
 
@@ -31,3 +33,12 @@ $ ./bootstrap.sh --vault-unseal
 # Stop
 $ ./bootstrap.sh --stop
 ```
+
+### External urls
+
+* https://traefik.docker.localhost
+* https://consul.docker.localhost
+* https://nomad.docker.localhost
+* https://vault.docker.localhost
+* https://prometheus.docker.localhost
+* https://grafana.docker.localhost
