@@ -33,6 +33,9 @@ install_tools() {
 
 install_hashistack() {
     step "===== Installing hashistack ====="
+    export $(xargs < /home/vagrant/localhost.env)
+    echo "[INFO] CONSUL_ENCRYPT=${CONSUL_ENCRYPT}"
+    echo "encrypt = \"${CONSUL_ENCRYPT}\"" | tee -a /home/vagrant/consul.hcl > /dev/null 
     hashi-up consul install --local --version ${CONSUL_VERSION} --config-file /home/vagrant/consul.hcl && \
     hashi-up nomad install --local --version ${NOMAD_VERSION} --config-file /home/vagrant/nomad.hcl
 }

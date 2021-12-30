@@ -5,6 +5,7 @@ log_json  = true
 leave_on_interrupt = false
 leave_on_terminate = true
 consul {
+  address = "127.0.0.1:8500"
   server_service_name = "nomad"
   client_service_name = "nomad-client"
   auto_advertise = true
@@ -18,8 +19,8 @@ client {
   enabled = true
 }
 advertise {
-  http = "{{ GetInterfaceIP \"public-subnet\" }}"
-  rpc  = "{{ GetInterfaceIP \"public-subnet\" }}"
-  serf = "{{ GetInterfaceIP \"public-subnet\" }}"
+  http = "172.0.10.201"
+  rpc  = "172.0.10.201"
+  serf = "172.0.10.201"
 }
-bind_addr = "{{ GetInterfaceIP \"public-subnet\" }}"
+bind_addr = "172.0.10.201"

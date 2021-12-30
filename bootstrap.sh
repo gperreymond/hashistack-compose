@@ -94,4 +94,6 @@ fi
 
 if [ "$1" = '--start-nomad-clients' ]; then
     echo "[INFO] start vagrant clients"
+    cd nomad-clients
+    ../bin/vagrant up
 fi

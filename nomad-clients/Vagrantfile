@@ -14,9 +14,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ubuntu.vm.hostname = "ubuntu20.04"
     end
 
-    config.vm.network "public_network", bridge: "public-subnet"
+    config.vm.network "public_network", bridge: "public-subnet", ip: "172.0.10.201"
 
-    config.vm.provision "file", source: "../certs/consul-agent-ca.pem", destination: "/home/vagrant/certs/consul-agent-ca.pem"
+    config.vm.provision "file", source: "../localhost.env", destination: "/home/vagrant/localhost.env"
+    config.vm.provision "file", source: "../certs", destination: "/home/vagrant/certs"
     config.vm.provision "file", source: "./consul.hcl", destination: "/home/vagrant/consul.hcl"
     config.vm.provision "file", source: "./nomad.hcl", destination: "/home/vagrant/nomad.hcl"
     config.vm.provision:shell, path: "setup.sh"
