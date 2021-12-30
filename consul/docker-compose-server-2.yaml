@@ -15,7 +15,8 @@ services:
     - './configs/server.hcl:/home/root/consul.hcl:ro'
     - '../certs:/home/root/certs:ro'
     networks:
-    - 'public-subnet'
+      'public-subnet':
+        ipv4_address: 172.0.10.102
     command: ['/root/bin/consul', 'agent', '-encrypt=${CONSUL_ENCRYPT}', '-config-file=/home/root/consul.hcl', '-node=node-consul-server-2']
 
   consul-exporter-consul-server-2:

@@ -24,6 +24,7 @@ if [ "$1" = '--start' ]; then
     # network
     docker network create \
         --driver=bridge \
+        --opt com.docker.network.bridge.name=public-subnet \
         --gateway "172.0.10.1" \
         --subnet "172.0.10.0/24" \
         public-subnet
@@ -89,4 +90,8 @@ if [ "$1" = '--vault-unseal' ]; then
         curl -s -X PUT -d "{\"key\":\"${unseal_key_2}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
         curl -s -X PUT -d "{\"key\":\"${unseal_key_3}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
     fi
+fi
+
+if [ "$1" = '--start-nomad-clients' ]; then
+    echo "[INFO] start vagrant clients"
 fi

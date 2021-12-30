@@ -3,25 +3,12 @@
 
 CONSUL_VERSION=1.11.1
 NOMAD_VERSION=1.2.3
-VAULT_VERSION=1.9.2
-
-ensure_netplan_apply() {
-    # First node up assign dhcp IP for eth1, not base on netplan yml
-    sleep 5
-    sudo netplan apply
-}
 
 step=1
 step() {
     echo "Step $step $1"
     step=$((step+1))
 }
-
-# resolve_dns() {
-#     step "===== Create symlink to /run/systemd/resolve/resolv.conf ====="
-#     sudo rm /etc/resolv.conf
-#     sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
-# }
 
 install_docker() {
     step "===== Installing docker ====="
@@ -38,27 +25,16 @@ install_docker() {
     sudo usermod -aG docker vagrant
 }
 
-install_openssh() {
-    step "===== Installing openssh ====="
-    sudo apt update
-    sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-    sudo apt install -y openssh-server
-    sudo systemctl enable ssh
-}
-
 install_tools() {
     step "===== Installing tools ====="
     sudo apt install -y net-tools curl
-    curl -sLS https://get.hashi-up.dev | sh && \
-    hashi-up consul get --version ${CONSUL_VERSION} && \
-    hashi-up nomad get --version ${NOMAD_VERSION} && \
-    hashi-up vault get --version ${VAULT_VERSION}
+    curl -sLS https://get.hashi-up.dev | sh
 }
 
-setup_root_login() {
-    sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-    sudo systemctl restart ssh
-    sudo echo "root:rootroot" | chpasswd
+install_hashistack() {
+    step "===== Installing hashistack ====="
+    hashi-up consul install --local --version ${CONSUL_VERSION} --config-file /home/vagrant/consul.hcl && \
+    hashi-up nomad install --local --version ${NOMAD_VERSION} --config-file /home/vagrant/nomad.hcl
 }
 
 setup_welcome_msg() {
@@ -68,12 +44,9 @@ setup_welcome_msg() {
 }
 
 main() {
-    ensure_netplan_apply
-    # resolve_dns
     install_tools
-    install_openssh
     install_docker
-    setup_root_login
+    install_hashistack
     setup_welcome_msg
 }
 

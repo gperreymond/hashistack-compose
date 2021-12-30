@@ -2,8 +2,9 @@
 
 ### Pricipals
 
+* Simulate the internet public ips with docker network named __public-subnet__
 * Each docker compose files represents an instance
-* An example of nomad client is provided with a vagrant procedure
+* Nomad clients, provided with a vagrant procedure
 
 ### Work in progress
 
@@ -11,7 +12,7 @@
 * [x] Certificats with mkcert
 * [x] Consul servers x3
 * [x] Nomad servers x3 with consul client
-* [x] Nomad client with consul client
+* [x] Nomad clients x2 with consul client (Vagrant provisionning)
 * [x] Vault server x1 with consul client
 * [x] Vault init and unseal
 * [x] Consul gossip encryption enabled
@@ -38,6 +39,8 @@ $ ./bootstrap.sh --start
 # Vault, do it once only each time the stack was down to up
 $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
+# Start the 2 nomad clients
+$ ./bootstrap.sh --start-nomad-clients
 # Stop
 $ ./bootstrap.sh --stop
 ```

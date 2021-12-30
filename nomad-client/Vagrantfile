@@ -9,14 +9,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     config.vm.box = "generic/ubuntu2004"
     config.vm.box_version = "3.1.16"
-    config.vm.provision:shell, inline: <<-SHELL
-        echo "root:rootroot" | sudo chpasswd
-        sudo timedatectl set-timezone Asia/Ho_Chi_Minh
-    SHELL
 
     config.vm.define "ubuntu20.04" do |ubuntu|
         ubuntu.vm.hostname = "ubuntu20.04"
     end
 
-    config.vm.provision:shell, path: "bootstrap.sh"
+    config.vm.network "public_network", bridge: "public-subnet"
+
+    config.vm.provision "file", source: "../certs/consul-agent-ca.pem", destination: "/home/vagrant/certs/consul-agent-ca.pem"
+    config.vm.provision "file", source: "./consul.hcl", destination: "/home/vagrant/consul.hcl"
+    config.vm.provision "file", source: "./nomad.hcl", destination: "/home/vagrant/nomad.hcl"
+    config.vm.provision:shell, path: "setup.sh"
 end

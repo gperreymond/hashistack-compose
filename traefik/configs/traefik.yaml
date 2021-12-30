@@ -33,5 +33,3 @@ entryPoints:
           scheme: https
   websecure:
     address: ':443'
-  consul-server:
-    address: ':8500'
