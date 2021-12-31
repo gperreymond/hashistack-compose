@@ -6,12 +6,10 @@ ENV CONSUL_VERSION=1.11.1 \
 
 # PREPARE
 RUN apt update && \
-    apt install -y libcap2-bin iproute2
+    apt install -y libcap2-bin iproute2 curl net-tools iptables
 
 # HASHIUP
-RUN apt update && \
-    apt install -y curl && \
-    curl -sLS https://get.hashi-up.dev | sh && \
+RUN curl -sLS https://get.hashi-up.dev | sh && \
     hashi-up consul get --version ${CONSUL_VERSION} && \
     hashi-up nomad get --version ${NOMAD_VERSION} && \
     hashi-up vault get --version ${VAULT_VERSION}
@@ -20,6 +18,6 @@ EXPOSE 8500 8600 8600/udp 8300 8301 8301/udp 8302 8302/udp
 EXPOSE 4646 4647 4648 4648/udp
 EXPOSE 8200
 
-# CLEN IMAGE
+# CLEAN IMAGE
 RUN apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

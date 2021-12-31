@@ -12,8 +12,6 @@ telemetry = {
 ui_config {
   enabled = true
 }
-encrypt_verify_incoming = true
-encrypt_verify_outgoing = true
 autopilot {
   cleanup_dead_servers = true
   last_contact_threshold = "1s"
@@ -21,8 +19,9 @@ autopilot {
   server_stabilization_time = "10s"
 }
 verify_incoming = true
+verify_incoming_rpc = true
 verify_outgoing = true
-verify_server_hostname = true
+verify_server_hostname = false
 ca_file = "/home/root/certs/consul-agent-ca.pem"
 cert_file = "/home/root/certs/europe-paris-server-consul-0.pem"
 key_file = "/home/root/certs/europe-paris-server-consul-0-key.pem"

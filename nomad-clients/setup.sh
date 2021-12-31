@@ -28,15 +28,19 @@ install_docker() {
 install_tools() {
     step "===== Installing tools ====="
     sudo apt install -y net-tools curl
-    curl -sLS https://get.hashi-up.dev | sh
 }
 
-install_hashistack() {
-    step "===== Installing hashistack ====="
+install_consul() {
+    step "===== Installing consul ====="
     export $(xargs < /home/vagrant/localhost.env)
     echo "[INFO] CONSUL_ENCRYPT=${CONSUL_ENCRYPT}"
     echo "encrypt = \"${CONSUL_ENCRYPT}\"" | tee -a /home/vagrant/consul.hcl > /dev/null 
-    hashi-up consul install --local --version ${CONSUL_VERSION} --config-file /home/vagrant/consul.hcl && \
+    hashi-up consul install --local --version ${CONSUL_VERSION} --config-file /home/vagrant/consul.hcl
+}
+
+install_nomad() {
+    step "===== Installing nomad ====="
+    echo "encrypt = \"${CONSUL_ENCRYPT}\"" | tee -a /home/vagrant/consul.hcl > /dev/null
     hashi-up nomad install --local --version ${NOMAD_VERSION} --config-file /home/vagrant/nomad.hcl
 }
 
@@ -49,7 +53,8 @@ setup_welcome_msg() {
 main() {
     install_tools
     install_docker
-    install_hashistack
+    install_consul
+    install_nomad
     setup_welcome_msg
 }
 

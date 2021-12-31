@@ -6,6 +6,7 @@ services:
     image: 'hashistack-alpine:1.0.0'
     container_name: 'consul-server-3'
     restart: 'unless-stopped'
+    privileged: true
     labels:
     - 'traefik.enable=true'
     - 'traefik.http.routers.consul.rule=Host(`consul.docker.localhost`)'
@@ -22,6 +23,7 @@ services:
   consul-exporter-consul-server-3:
     image: 'prom/consul-exporter'
     container_name: consul-exporter-consul-server-3
+    privileged: true
     restart: 'unless-stopped'
     networks:
     - 'public-subnet'

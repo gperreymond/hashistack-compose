@@ -2,23 +2,37 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
+INSTANCES_COUNT = 1
+
+def clientIP(num)
+    return "172.0.10.#{num+200}"
+end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    config.vm.provider :libvirt do |libvirt|
-        libvirt.driver = "kvm"
-    end
     config.vm.box = "generic/ubuntu2004"
     config.vm.box_version = "3.1.16"
 
-    config.vm.define "ubuntu20.04" do |ubuntu|
-        ubuntu.vm.hostname = "ubuntu20.04"
+    (1..INSTANCES_COUNT).each do |i|
+        config.vm.define vm_instance_name = "instance-%d" % i do |instance|
+            instance.vm.hostname = vm_instance_name
+            instance.vm.network "public_network", bridge: "public-subnet", ip: clientIP(i)
+            # Install tools
+            config.vm.provision "shell", privileged: true, inline: <<-SHELL
+                apt-get update
+                apt-get -y install bridge-utils net-tools curl
+            SHELL
+            # instance.vm.provision "file", source: "../localhost.env", destination: "/home/vagrant/localhost.env"
+            # instance.vm.provision "file", source: "../certs", destination: "/home/vagrant/certs"
+            # instance.vm.provision "file", source: "./consul.hcl", destination: "/home/vagrant/consul.hcl"
+            # instance.vm.provision "file", source: "./nomad.hcl", destination: "/home/vagrant/nomad.hcl"
+            # instance.vm.provision :shell, :privileged => true, :path => "setup.sh"
+        end
     end
 
-    config.vm.network "public_network", bridge: "public-subnet", ip: "172.0.10.201"
-
-    config.vm.provision "file", source: "../localhost.env", destination: "/home/vagrant/localhost.env"
-    config.vm.provision "file", source: "../certs", destination: "/home/vagrant/certs"
-    config.vm.provision "file", source: "./consul.hcl", destination: "/home/vagrant/consul.hcl"
-    config.vm.provision "file", source: "./nomad.hcl", destination: "/home/vagrant/nomad.hcl"
-    config.vm.provision:shell, path: "setup.sh"
+    config.vm.provider "virtualbox" do |vb|
+        vb.cpus = 1
+        vb.memory = 1024
+        vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+    end
 end

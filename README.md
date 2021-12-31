@@ -1,6 +1,6 @@
 # HASHISTACK COMPOSE
 
-### Pricipals
+### Architecture
 
 * Simulate the internet public ips with docker network named __public-subnet__
 * Each docker compose files represents an instance
@@ -8,11 +8,12 @@
 
 ### Work in progress
 
+> __docker-compose provisionning__
+
 * [x] Docker base image with consul, nomad and vault
 * [x] Certificats with mkcert
 * [x] Consul servers x3
 * [x] Nomad servers x3 with consul client
-* [x] Nomad clients x2 with consul client (Vagrant provisionning)
 * [x] Vault server x1 with consul client
 * [x] Vault init and unseal
 * [x] Consul gossip encryption enabled
@@ -23,33 +24,39 @@
 * [x] Monitoring Grafana: Consul dashboard
 * [x] Monitoring Prometheus: Consul alerts
 
+> __vagrant provisionning__
+
+* [x] Nomad clients x2 with consul client
+
 ### How to bootstrap the hashistack ?
 
 You need VirtualBox installed for Vagrant.
 
 ```sh
-# Only one time
+# only one time
 $ sudo apt install -y libarchive-dev libarchive-tools # for vagrant
 $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh
 $ docker build -t hashistack-alpine:1.0.0 .
 $ ./bootstrap.sh --generate-security
-# Start
+# start
 $ ./bootstrap.sh --start
-# Vault, do it once only each time the stack was down to up
+# vault, do it once only each time the stack was down to up
 $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
-# Start the 2 nomad clients
+# start the 2 nomad clients
 $ ./bootstrap.sh --start-nomad-clients
-# Stop
+# stop
 $ ./bootstrap.sh --stop
 ```
 
-### How to run the nomad client ?
+### How to interact with vagrant and the nomad client ?
 
 ```sh
-$ cd nomad-client
+$ cd nomad-clients
 $ ../bin/vagrant up
+$ ../bin/vagrant reload --provisionning
+# etc.
 ```
 
 ### External urls
@@ -60,3 +67,9 @@ $ ../bin/vagrant up
 * https://vault.docker.localhost
 * https://prometheus.docker.localhost
 * https://grafana.docker.localhost
+
+### Change logs
+
+* https://github.com/hashicorp/nomad/blob/main/CHANGELOG.md
+* https://github.com/hashicorp/consul/blob/main/CHANGELOG.md
+* https://github.com/hashicorp/vault/blob/main/CHANGELOG.md
