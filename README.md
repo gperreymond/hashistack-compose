@@ -8,13 +8,13 @@
 
 ### Work in progress
 
-> __docker-compose provisionning__
+> __docker provisionning__
 
 * [x] Docker base image with consul, nomad and vault
 * [x] Certificats with mkcert
 * [x] Consul servers x3
 * [x] Nomad servers x3 with consul client
-* [x] Vault server x1 with consul client
+* [x] Vault server x3 with consul client
 * [x] Vault init and unseal
 * [x] Consul gossip encryption enabled
 * [x] Consul tls enabled
@@ -33,7 +33,7 @@
 You need VirtualBox installed for Vagrant.
 
 ```sh
-# only one time
+# only one time, on your host
 $ sudo apt install -y libarchive-dev libarchive-tools # for vagrant
 $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh

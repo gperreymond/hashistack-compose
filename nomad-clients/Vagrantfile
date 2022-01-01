@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             # Install tools
             config.vm.provision "shell", privileged: true, inline: <<-SHELL
                 apt-get update
-                apt-get -y install bridge-utils net-tools curl
+                apt-get -y install bridge-utils net-tools curl iputils-ping
             SHELL
             # instance.vm.provision "file", source: "../localhost.env", destination: "/home/vagrant/localhost.env"
             # instance.vm.provision "file", source: "../certs", destination: "/home/vagrant/certs"

@@ -6,7 +6,7 @@ ENV CONSUL_VERSION=1.11.1 \
 
 # PREPARE
 RUN apt update && \
-    apt install -y libcap2-bin iproute2 curl net-tools iptables
+    apt install -y libcap2-bin curl
 
 # HASHIUP
 RUN curl -sLS https://get.hashi-up.dev | sh && \

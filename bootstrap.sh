@@ -25,6 +25,9 @@ if [ "$1" = '--start' ]; then
     docker network create \
         --driver=bridge \
         --opt com.docker.network.bridge.name=public-subnet \
+        --opt com.docker.network.bridge.enable_icc=true \
+        --opt com.docker.network.bridge.enable_ip_masquerade=true \
+        --opt com.docker.network.bridge.host_binding_ipv4=0.0.0.0 \
         --gateway "172.0.10.1" \
         --subnet "172.0.10.0/24" \
         public-subnet
@@ -32,6 +35,7 @@ if [ "$1" = '--start' ]; then
     docker-compose --env-file localhost.env -f consul/docker-compose-server-1.yaml up -d
     docker-compose --env-file localhost.env -f consul/docker-compose-server-2.yaml up -d
     docker-compose --env-file localhost.env -f consul/docker-compose-server-3.yaml up -d
+    exit 0
     sleep 20
     # traefik
     docker-compose --env-file localhost.env -f traefik/docker-compose.yaml up -d
@@ -90,10 +94,4 @@ if [ "$1" = '--vault-unseal' ]; then
         curl -s -X PUT -d "{\"key\":\"${unseal_key_2}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
         curl -s -X PUT -d "{\"key\":\"${unseal_key_3}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
     fi
-fi
-
-if [ "$1" = '--start-nomad-clients' ]; then
-    echo "[INFO] start vagrant clients"
-    cd nomad-clients
-    ../bin/vagrant up
 fi
