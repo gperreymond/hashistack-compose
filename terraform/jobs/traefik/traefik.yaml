@@ -7,13 +7,11 @@ api:
   insecure: true
 providers:
   consulCatalog:
+    defaultRule: "Host(`{{ .Name }}.docker.localhost`)"
     endpoint:
       address: 127.0.0.1:8500
       datacenter: europe-paris
     exposedbydefault: false
-  file:
-    filename: /etc/traefik/dynamic_conf.yaml
-    watch: true
 log:
   level: INFO
   format: json
@@ -23,7 +21,7 @@ entryPoints:
     http:
       redirections:
         entryPoint:
-          to: http
+          to: https
           scheme: https
   https:
     address: ':443'

@@ -23,7 +23,7 @@ job "traefik" {
       driver = "docker"
 
       config {
-        image        = "traefik:v2.4"
+        image        = "traefik:v2.5.6"
         network_mode = "host"
 
         volumes = [
@@ -66,6 +66,13 @@ EOF
       service {
         name = "traefik"
         port = "https"
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.traefik.service=api@internal",
+          "traefik.http.routers.traefik.tls=true",
+          "traefik.http.services.traefik.loadbalancer.server.port=8080"
+        ]
 
         check {
           name     = "alive"
