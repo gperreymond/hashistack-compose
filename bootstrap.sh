@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1" = '--generate-security' ]; then
+if [ "$1" = "--generate" ]; then
     mkdir -p certs
     # ssl certificats for traefik
     ./bin/mkcert -install
@@ -19,57 +19,37 @@ if [ "$1" = '--generate-security' ]; then
 " > localhost.env
 fi
 
-if [ "$1" = '--start' ]; then
-    mkdir -p data
-    # network
-    docker network create \
-        --driver=bridge \
-        --opt com.docker.network.bridge.name=public-subnet \
-        --opt com.docker.network.bridge.enable_icc=true \
-        --opt com.docker.network.bridge.enable_ip_masquerade=true \
-        --opt com.docker.network.bridge.host_binding_ipv4=0.0.0.0 \
-        --gateway "172.0.10.1" \
-        --subnet "172.0.10.0/24" \
-        public-subnet
-    # consul server
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-1.yaml up -d
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-2.yaml up -d
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-3.yaml up -d
-    exit 0
-    sleep 20
-    # traefik
-    docker-compose --env-file localhost.env -f traefik/docker-compose.yaml up -d
-    # vault
-    docker-compose --env-file localhost.env -f vault/docker-compose-server.yaml up -d
-    # nomad server
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-1.yaml up -d
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-2.yaml up -d
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-3.yaml up -d
-    # monitoring
-    docker-compose --env-file localhost.env -f monitoring/docker-compose.yaml up -d
+if [ "$1" = "--start-consul" ]; then
+    cd consul
+    ../bin/vagrant up
 fi
 
-if [ "$1" = '--stop' ]; then
-    # monitoring
-    docker-compose --env-file localhost.env -f monitoring/docker-compose.yaml down
-    # nomad server
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-1.yaml down
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-2.yaml down
-    docker-compose --env-file localhost.env -f nomad/docker-compose-server-3.yaml down
-    # vault
-    docker-compose --env-file localhost.env -f vault/docker-compose-server.yaml down
-    # traefik
-    docker-compose --env-file localhost.env -f traefik/docker-compose.yaml down
-    # consul server
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-1.yaml down
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-2.yaml down
-    docker-compose --env-file localhost.env -f consul/docker-compose-server-3.yaml down
-    # network
-    docker network rm public-subnet
-    rm -rf data
+if [ "$1" = "--reload-consul" ]; then
+    cd consul
+    ../bin/vagrant reload --provision
 fi
 
-if [ "$1" = '--vault-init' ]; then
+if [ "$1" = "--start-nomad" ]; then
+    cd nomad
+    ../bin/vagrant up
+fi
+
+if [ "$1" = "--reload-nomad" ]; then
+    cd nomad
+    ../bin/vagrant reload --provision
+fi
+
+if [ "$1" = "--start-nomad-clients" ]; then
+    cd nomad-clients
+    ../bin/vagrant up
+fi
+
+if [ "$1" = "--reload-nomad-clients" ]; then
+    cd nomad-clients
+    ../bin/vagrant reload --provision
+fi
+
+if [ "$1" = "--vault-init" ]; then
     initialized=$(curl -s https://vault.docker.localhost/v1/sys/init | jq -r .initialized)
     echo "[INFO] initialized=${initialized}"
     if [ $initialized = "true" ]; then
@@ -78,7 +58,7 @@ if [ "$1" = '--vault-init' ]; then
     docker exec -it vault-server /root/bin/vault operator init -format=json > data/vault.json
 fi
 
-if [ "$1" = '--vault-unseal' ]; then
+if [ "$1" = "--vault-unseal" ]; then
     sealed=$(curl -s https://vault.docker.localhost/v1/sys/seal-status | jq -r .sealed)
     echo "[INFO] sealed=${sealed}"
     if [ $sealed = "true" ]; then
@@ -94,4 +74,19 @@ if [ "$1" = '--vault-unseal' ]; then
         curl -s -X PUT -d "{\"key\":\"${unseal_key_2}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
         curl -s -X PUT -d "{\"key\":\"${unseal_key_3}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
     fi
+fi
+
+if [ "$1" = "--stop-consul" ]; then
+    cd consul
+    ../bin/vagrant destroy
+fi
+
+if [ "$1" = "--stop-nomad" ]; then
+    cd nomad
+    ../bin/vagrant destroy
+fi
+
+if [ "$1" = "--stop-nomad-clients" ]; then
+    cd nomad-clients
+    ../bin/vagrant destroy
 fi

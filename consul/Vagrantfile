@@ -3,25 +3,23 @@
 
 VAGRANTFILE_API_VERSION = "2"
 CONSUL_VERSION = "1.11.1"
-NOMAD_VERSION = "1.2.3"
 INSTANCES_COUNT = 1
 
 def assignIP(num)
-    return "192.168.50.#{num+10}"
+    return "192.168.50.#{num+100}"
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "generic/ubuntu2004"
     config.vm.box_version = "3.1.16"
     (1..INSTANCES_COUNT).each do |i|
-        config.vm.define vm_instance_name = "nomad-client-%d" % i do |instance|
+        config.vm.define vm_instance_name = "consul-server-%d" % i do |instance|
             instance.vm.hostname = vm_instance_name
             instance.vm.network "private_network", ip: assignIP(i)
 
             # install files
             instance.vm.provision "file", source: "../certs", destination: "/home/vagrant/certs"
-            instance.vm.provision "file", source: "../consul/configs/client.hcl", destination: "/home/vagrant/consul.hcl"
-            instance.vm.provision "file", source: "../nomad/configs/client.hcl", destination: "/home/vagrant/nomad.hcl"
+            instance.vm.provision "file", source: "./configs/server.hcl", destination: "/home/vagrant/consul.hcl"
 
             # install tools
             instance.vm.provision :shell,
@@ -37,9 +35,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 echo "[INFO] install nomad"
                 hashi-up nomad install --local --version #{NOMAD_VERSION} --config-file /home/vagrant/nomad.hcl
             EOF
-
-            # install docker
-            instance.vm.provision :docker
         end
     end
     config.vm.provider "virtualbox" do |vb|

@@ -8,25 +8,20 @@
 
 ### Work in progress
 
-> __docker provisionning__
-
-* [x] Docker base image with consul, nomad and vault
 * [x] Certificats with mkcert
-* [x] Consul servers x3
-* [x] Nomad servers x3 with consul client
-* [x] Vault server x3 with consul client
+* [x] Docker base image with consul, nomad and vault
+* [x] Consul servers x1
+* [x] Nomad servers x1 with consul client
+* [x] Vault server x1 with consul client
+* [x] Nomad clients x1 with consul client
 * [x] Vault init and unseal
 * [x] Consul gossip encryption enabled
 * [x] Consul tls enabled
 * [x] Monitoring Prometheus enabled
-* [x] Consul servers prometheus exporters
+* [x] Consul prometheus exporters
 * [x] Monitoring Grafana enabled
 * [x] Monitoring Grafana: Consul dashboard
 * [x] Monitoring Prometheus: Consul alerts
-
-> __vagrant provisionning__
-
-* [x] Nomad clients x2 with consul client
 
 ### How to bootstrap the hashistack ?
 
@@ -37,26 +32,21 @@ You need VirtualBox installed for Vagrant.
 $ sudo apt install -y libarchive-dev libarchive-tools # for vagrant
 $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh
-$ docker build -t hashistack-alpine:1.0.0 .
-$ ./bootstrap.sh --generate-security
-# start
-$ ./bootstrap.sh --start
+$ ./bootstrap.sh --generate
+# starting servers
+$ ./bootstrap.sh --start-consul
+$ ./bootstrap.sh --start-vault
+$ ./bootstrap.sh --start-nomad
 # vault, do it once only each time the stack was down to up
 $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
 # start the 2 nomad clients
 $ ./bootstrap.sh --start-nomad-clients
-# stop
-$ ./bootstrap.sh --stop
-```
-
-### How to interact with vagrant and the nomad client ?
-
-```sh
-$ cd nomad-clients
-$ ../bin/vagrant up
-$ ../bin/vagrant reload --provisionning
-# etc.
+# stop all
+$ ./bootstrap.sh --stop-consul
+$ ./bootstrap.sh --stop-vault
+$ ./bootstrap.sh --stop-nomad
+$ ./bootstrap.sh --stop-nomad-clients
 ```
 
 ### External urls

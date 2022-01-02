@@ -47,6 +47,3 @@ unzip ./vagrant.zip -d ./bin
 rm ./vagrant.zip
 chmod +x ./bin/vagrant
 echo "[INFO] vagrant v${VAGRANT_VERSION} installed"
-
-echo "[INFO] install vagrant plugin docker-compose"
-./bin/vagrant plugin install vagrant-docker-compose

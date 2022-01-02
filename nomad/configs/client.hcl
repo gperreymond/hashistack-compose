@@ -19,8 +19,8 @@ client {
   enabled = true
 }
 advertise {
-  http = "{{ GetInterfaceIP \"eth0\" }}"
-  rpc  = "{{ GetInterfaceIP \"eth0\" }}"
-  serf = "{{ GetInterfaceIP \"eth0\" }}"
+  http = "{{ GetInterfaceIP \"eth1\" }}"
+  rpc  = "{{ GetInterfaceIP \"eth1\" }}"
+  serf = "{{ GetInterfaceIP \"eth1\" }}"
 }
-bind_addr = "{{ GetInterfaceIP \"eth0\" }}"
+bind_addr = "{{ GetInterfaceIP \"eth1\" }}"

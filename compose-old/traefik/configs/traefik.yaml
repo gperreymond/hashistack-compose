@@ -12,7 +12,7 @@ providers:
     exposedbydefault: false
   consulCatalog:
     endpoint:
-      address: consul-client-traefik:8500
+      address: consul-client-global:8500
       datacenter: europe-paris
     exposedbydefault: false
   file:
