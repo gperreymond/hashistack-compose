@@ -2,5 +2,9 @@ bin
 certs
 data
 .vagrant
+.terraform
 
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
 localhost.env

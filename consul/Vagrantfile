@@ -32,8 +32,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 hashi-up version
                 echo "[INFO] install consul"
                 hashi-up consul install --local --version #{CONSUL_VERSION} --config-file /home/vagrant/consul.hcl
-                echo "[INFO] install nomad"
-                hashi-up nomad install --local --version #{NOMAD_VERSION} --config-file /home/vagrant/nomad.hcl
             EOF
         end
     end

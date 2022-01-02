@@ -1,35 +1,29 @@
 global:
   sendAnonymousUsage: false
-
+ping:
+  entryPoint: http
 api:
   dashboard: true
   insecure: true
-
 providers:
-  docker:
-    endpoint: unix:///var/run/docker.sock
-    watch: true
-    exposedbydefault: false
   consulCatalog:
     endpoint:
-      address: consul-client-global:8500
+      address: 127.0.0.1:8500
       datacenter: europe-paris
     exposedbydefault: false
   file:
     filename: /etc/traefik/dynamic_conf.yaml
     watch: true
-
 log:
   level: INFO
   format: json
-
 entryPoints:
-  web:
+  http:
     address: ':80'
     http:
       redirections:
         entryPoint:
-          to: websecure
+          to: http
           scheme: https
-  websecure:
+  https:
     address: ':443'

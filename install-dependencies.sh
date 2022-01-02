@@ -5,6 +5,7 @@ CONSUL_VERSION=1.11.1
 NOMAD_VERSION=1.2.3
 VAULT_VERSION=1.9.2
 VAGRANT_VERSION=2.2.19
+TERRAFORM_VERSION=1.1.2
 
 rm -rf ./bin
 mkdir ./bin
@@ -47,3 +48,11 @@ unzip ./vagrant.zip -d ./bin
 rm ./vagrant.zip
 chmod +x ./bin/vagrant
 echo "[INFO] vagrant v${VAGRANT_VERSION} installed"
+
+# Download terraform
+echo "[INFO] download terraform"
+curl -sLo ./terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+unzip ./terraform.zip -d ./bin
+rm ./terraform.zip
+chmod +x ./bin/terraform
+echo "[INFO] terraform v${TERRAFORM_VERSION} installed"

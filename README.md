@@ -2,11 +2,11 @@
 
 ### Architecture
 
-* Simulate the internet public ips with docker network named __public-subnet__
-* Each docker compose files represents an instance
-* Nomad clients, provided with a vagrant procedure
+> IMAGE SOON
 
 ### Work in progress
+
+> Vagrant
 
 * [x] Certificats with mkcert
 * [x] Docker base image with consul, nomad and vault
@@ -19,6 +19,9 @@
 * [x] Consul tls enabled
 * [x] Monitoring Prometheus enabled
 * [x] Consul prometheus exporters
+
+> Terraform
+
 * [x] Monitoring Grafana enabled
 * [x] Monitoring Grafana: Consul dashboard
 * [x] Monitoring Prometheus: Consul alerts
@@ -33,20 +36,21 @@ $ sudo apt install -y libarchive-dev libarchive-tools # for vagrant
 $ sudo apt install libnss3-tools # for mkcert
 $ ./install-depencencies.sh
 $ ./bootstrap.sh --generate
-# starting servers
+# starting sequence
 $ ./bootstrap.sh --start-consul
 $ ./bootstrap.sh --start-vault
-$ ./bootstrap.sh --start-nomad
-# vault, do it once only each time the stack was down to up
 $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
+$ ./bootstrap.sh --start-nomad
 # start the 2 nomad clients
 $ ./bootstrap.sh --start-nomad-clients
-# stop all
+# stop one by one
 $ ./bootstrap.sh --stop-consul
 $ ./bootstrap.sh --stop-vault
 $ ./bootstrap.sh --stop-nomad
 $ ./bootstrap.sh --stop-nomad-clients
+# or stop all
+$ ./bootstrap.sh --stop-all
 ```
 
 ### External urls

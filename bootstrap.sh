@@ -14,9 +14,11 @@ if [ "$1" = "--generate" ]; then
     mv consul-agent-ca-key.pem certs/
     mv europe-paris-server-consul-0-key.pem certs/
     mv europe-paris-server-consul-0.pem certs/
-    # docker compose env vars
-    echo "CONSUL_ENCRYPT=\"$(./bin/consul keygen)\"
-" > localhost.env
+fi
+
+if [ "$1" = "--terraform" ]; then
+    cd terraform
+    ../bin/terraform "$2"
 fi
 
 if [ "$1" = "--start-consul" ]; then
@@ -74,6 +76,17 @@ if [ "$1" = "--vault-unseal" ]; then
         curl -s -X PUT -d "{\"key\":\"${unseal_key_2}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
         curl -s -X PUT -d "{\"key\":\"${unseal_key_3}\"}" -H "Content-Type: application/json" https://vault.docker.localhost/v1/sys/unseal | jq
     fi
+fi
+
+if [ "$1" = "--stop-all" ]; then
+    cd nomad-clients
+    ../bin/vagrant destroy
+    cd ..
+    cd nomad
+    ../bin/vagrant destroy
+    cd ..
+    cd consul
+    ../bin/vagrant destroy
 fi
 
 if [ "$1" = "--stop-consul" ]; then
