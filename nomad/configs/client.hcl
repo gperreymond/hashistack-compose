@@ -17,6 +17,9 @@ server {
 }
 client {
   enabled = true
+  options {
+    "docker.privileged.enabled" = "true"
+  }
 }
 advertise {
   http = "{{ GetInterfaceIP \"eth1\" }}"
