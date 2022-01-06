@@ -16,9 +16,16 @@ if [ "$1" = "--generate" ]; then
     mv europe-paris-server-consul-0.pem certs/
 fi
 
-if [ "$1" = "--terraform" ]; then
+if [ "$1" = "--deploy-apply" ]; then
     cd terraform
-    ../bin/terraform "$2"
+    ../bin/terraform init
+    ../bin/terraform apply
+fi
+
+if [ "$1" = "--deploy-destroy" ]; then
+    cd terraform
+    ../bin/terraform init
+    ../bin/terraform destroy
 fi
 
 if [ "$1" = "--start-consul" ]; then

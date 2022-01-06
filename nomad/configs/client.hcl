@@ -19,6 +19,7 @@ client {
   enabled = true
   options {
     "docker.privileged.enabled" = "true"
+    "docker.volumes.enabled" = "true"
   }
 }
 advertise {

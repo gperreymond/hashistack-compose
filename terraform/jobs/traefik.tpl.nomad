@@ -6,7 +6,6 @@ job "traefik" {
   update {
     max_parallel = 1
     stagger = "1m"
-    # Enable automatically reverting to the last stable job on a failed deployment.
     auto_revert = true
   }
 
@@ -69,9 +68,8 @@ EOF
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.traefik.service=api@internal",
           "traefik.http.routers.traefik.tls=true",
-          "traefik.http.services.traefik.loadbalancer.server.port=8080"
+          "traefik.http.services.traefik.loadbalancer.server.port=8080",
         ]
 
         check {
