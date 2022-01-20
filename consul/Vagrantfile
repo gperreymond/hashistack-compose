@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
-CONSUL_VERSION = "1.11.1"
+CONSUL_VERSION = "1.11.2"
 INSTANCES_COUNT = 1
 
 def assignIP(num)

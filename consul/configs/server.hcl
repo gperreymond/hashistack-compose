@@ -6,12 +6,18 @@ server    = true
 encrypt = "IEU8KbUFLpSUZBtbz/4lA7NN/w17tAREwGh9MsMmktQ="
 bootstrap_expect = 1
 retry_join = ["192.168.50.101"]
-telemetry = {
+telemetry {
   prometheus_retention_time = "8h"
   disable_hostname = true
 }
 ui_config {
   enabled = true
+}
+connect {
+  enabled = true
+}
+ports {
+  grpc = 8502
 }
 autopilot {
   cleanup_dead_servers = true

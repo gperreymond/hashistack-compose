@@ -42,7 +42,7 @@ $ ./bootstrap.sh --start-vault
 $ ./bootstrap.sh --vault-init
 $ ./bootstrap.sh --vault-unseal
 $ ./bootstrap.sh --start-nomad
-# start the 2 nomad clients
+# start nomad clients (only 1 for test)
 $ ./bootstrap.sh --start-nomad-clients
 # stop one by one
 $ ./bootstrap.sh --stop-consul

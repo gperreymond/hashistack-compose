@@ -10,8 +10,14 @@ verify_incoming_rpc = true
 verify_outgoing = true
 verify_server_hostname = false
 ca_file = "/home/vagrant/certs/consul-agent-ca.pem"
-auto_encrypt = {
+auto_encrypt {
   tls = true
+}
+connect {
+  enabled = true
+}
+ports {
+  grpc = 8502
 }
 advertise_addr = "{{ GetInterfaceIP \"eth1\" }}"
 bind_addr = "0.0.0.0"
